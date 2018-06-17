@@ -48,7 +48,8 @@ public class Register extends javax.swing.JFrame {
         optionTypeUser = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("REGISTER");
 
         txtFirstName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -183,11 +184,9 @@ public class Register extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        String string="";
-        txtFirstName.setText(string);
-        txtLastName.setText(string);
-        txtPassword.setText(string);
-        txtUser.setText(string);
+        Login login = new Login();
+        login.show();
+        dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
