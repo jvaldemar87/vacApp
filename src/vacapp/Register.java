@@ -57,6 +57,11 @@ public class Register extends javax.swing.JFrame {
         jLabel4.setText("Password:");
 
         btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         btnSubmit.setText("Submit");
         btnSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -182,6 +187,14 @@ public class Register extends javax.swing.JFrame {
                 System.out.println("2");
             }
     }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        String string="";
+        txtFirstName.setText(string);
+        txtLastName.setText(string);
+        txtPassword.setText(string);
+        txtUser.setText(string);
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * @param args the command line arguments
