@@ -5,7 +5,6 @@
  */
 package vacapp;
 
-
 import Clase.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,13 +13,14 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
  * @author jvald
  */
 public class Login extends javax.swing.JFrame {
-
+    int counterFalses=0;
     /**
      * Creates new form Login
      */
@@ -126,17 +126,46 @@ public class Login extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
         try {
-            if(loginMethod(txtUsuario.getText(),txtPassword.getText())==true){
-                JOptionPane.showMessageDialog(null, "Correcto");
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Contraseña incorrecto");
+            if (userExist(txtUsuario.getText()) == "false") {
+                counterFalses =0;
+                JOptionPane.showMessageDialog(null, "Usuario incorrecto");
+            } else {
+                if(consultingUserBlock(txtUsuario.getText()) == true){
+                    JOptionPane.showMessageDialog(null, "Usuario Bloqueado");
+                }
+                else{
+                    if (passCorrect(txtPassword.getText()) == "false") {
+                    counterFalses++;
+                    JOptionPane.showMessageDialog(
+                            null, "Contraseña incorrecta \n intento numero "+ counterFalses
+                            +"\n despues del 3º intento el usuario se bloqueara");
+                    if(counterFalses>3){
+                        bockUser(txtUsuario.getText());
+                        JOptionPane.showMessageDialog(
+                                null, "favor de contactar con un administrador para que se desbloquee al usuario:\n"
+                                +txtUsuario.getText());
+                    } 
+                } else {
+                        if(userType(txtUsuario.getText()) == "1"){
+                            SupervisorView supervisorView = new SupervisorView();
+                            supervisorView.show();
+                            dispose();
+                        }
+                        else if(userType(txtUsuario.getText()) == "2"){
+                            EmployeeView employeeView = new EmployeeView();
+                            employeeView.show();
+                            dispose();
+                        }
+                        
+                    
+                }
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
+
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
@@ -149,10 +178,9 @@ public class Login extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         Connection conection = conectorSQL.getInstance().getConnection();
-        
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -194,18 +222,77 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 
-    public static boolean loginMethod(String user, String pass) throws SQLException{
+    public static String userExist(String user) throws SQLException {
         Connection conection = conectorSQL.getInstance().getConnection();
-            ResultSet rs = null;
-            Statement st = null;
-            String sql = "SELECT * FROM usuarios where email='"+user+"' "+ "and password='"+pass+"';" ;
-            st = conection.createStatement();
-            rs = st.executeQuery(sql);
-            
-            if( rs.first() )
-                return true;       
-            else
-                return false;
-        
+        ResultSet rs = null;
+        Statement st = null;
+        String sql = "SELECT * FROM usuarios where email='" + user + "';";
+        st = conection.createStatement();
+        rs = st.executeQuery(sql);
+
+        if (rs.first()) {
+            rs.close();
+            return user;
+        } else {
+            return "false";
+        }
+    }
+
+    private String passCorrect(String pass) throws SQLException {
+        Connection conection = conectorSQL.getInstance().getConnection();
+        ResultSet rs = null;
+        Statement st = null;
+        String sql = "SELECT * FROM usuarios where password='" + pass + "';";
+        st = conection.createStatement();
+        rs = st.executeQuery(sql);
+
+        if (rs.first()) {
+            rs.close();
+            return pass;
+        } else {
+            return "false";
+        }
+    }
+
+    private void bockUser(String user) throws SQLException {
+        Connection conection = conectorSQL.getInstance().getConnection();
+        ResultSet rs = null;
+        Statement st = null;
+        String sql = "UPDATE `usuarios` SET `Habilitado` = '0' WHERE `usuarios`.`email` = '"
+                + user + "';";
+        st = conection.createStatement();
+        st.executeUpdate(sql);
+    }
+
+    private boolean consultingUserBlock(String user) throws SQLException {
+        Connection conection = conectorSQL.getInstance().getConnection();
+        ResultSet rs = null;
+        Statement st = null;
+        String sql = "SELECT * FROM usuarios where email='" + user + "'and Habilitado=0;";
+        st = conection.createStatement();
+        rs = st.executeQuery(sql);
+        if (rs.first()) {
+            rs.close();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private String userType(String user) throws SQLException {
+        String type="null";
+        Connection conection = conectorSQL.getInstance().getConnection();
+        ResultSet rs = null;
+        Statement st = null;
+        String sql = "SELECT tipo from usuarios where email ='"
+                + user+"';";
+        st = conection.createStatement();
+        rs = st.executeQuery(sql);
+        if(rs.first()){
+            JOptionPane.showMessageDialog(null, "tipo: "+sql);
+            return sql;
+        }
+        else
+            return "falso";
     }
 }
