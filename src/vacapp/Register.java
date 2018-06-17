@@ -5,6 +5,14 @@
  */
 package vacapp;
 
+import Clase.conectorSQL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Julian
@@ -40,7 +48,7 @@ public class Register extends javax.swing.JFrame {
         optionTypeUser = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         txtFirstName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,26 +174,12 @@ public class Register extends javax.swing.JFrame {
     }//GEN-LAST:event_optionTypeUserItemStateChanged
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        // TODO add your handling code here:
-        String name = txtFirstName.getText();
-        System.out.println(name);
-        
-        String LastName = txtLastName.getText();
-        System.out.println(LastName);
-        
-        String user = txtUser.getText();
-        System.out.println(user);
-        
-        String password = txtPassword.getText();
-        System.out.println(password);
-        
-        String type = optionTypeUser.getSelectedItem().toString();
-        if(type.equals("Supervisor"))
-            System.out.println("1");
-        else{
-            if(type.equals("Employee"))
-                System.out.println("2");
-            }
+        try {
+            // TODO add your handling code here:
+            registerMethod();
+        } catch (SQLException ex) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -194,9 +188,6 @@ public class Register extends javax.swing.JFrame {
         txtLastName.setText(string);
         txtPassword.setText(string);
         txtUser.setText(string);
-        Login login = new Login();
-        login.show();
-        dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
@@ -248,4 +239,38 @@ public class Register extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
+
+    private void registerMethod() throws SQLException {
+        
+        Connection conection = conectorSQL.getInstance().getConnection();
+        ResultSet rs = null;
+        Statement st = null;
+        String name = txtFirstName.getText();
+        String LastName = txtLastName.getText();
+        String user = txtUser.getText();
+        String password = txtPassword.getText();
+        String type = optionTypeUser.getSelectedItem().toString();
+        if (type.equals("Supervisor")) {
+            type = "1";
+        } else {
+            if (type.equals("Employee")) {
+                type = "2";
+            }
+        }
+
+        String sql = "INSERT INTO"
+                + "`usuarios` (`id`, `nombre`, `apellido`, `email`, `password`, `tipo`, `Habilitado`) "
+                + "VALUES (NULL,'"
+                + name + "','"
+                + LastName + "','"
+                + user + "','"
+                + password + "',"
+                + type + ", 1);";
+        
+        st = conection.createStatement();
+        st.executeUpdate(sql);
+        
+        
+        System.out.println("Hecho");
+    }
 }
