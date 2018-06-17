@@ -6,7 +6,6 @@
 package vacapp;
 
 import Clases.conectorSQL;
-import Clases.Login;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
