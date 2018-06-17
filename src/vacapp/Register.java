@@ -175,7 +175,12 @@ public class Register extends javax.swing.JFrame {
         System.out.println(password);
         
         String type = optionTypeUser.getSelectedItem().toString();
-        System.out.println(type);
+        if(type.equals("Supervisor"))
+            System.out.println("1");
+        else{
+            if(type.equals("Employee"))
+                System.out.println("2");
+            }
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     /**
