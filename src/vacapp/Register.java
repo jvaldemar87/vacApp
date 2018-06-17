@@ -59,6 +59,11 @@ public class Register extends javax.swing.JFrame {
         btnCancel.setText("Cancel");
 
         btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,10 +146,6 @@ public class Register extends javax.swing.JFrame {
 
     private void txtFirstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFirstNameActionPerformed
         // TODO add your handling code here:
-        String texto = txtFirstName.getText();
-        if ("".equals(texto)) {
-            System.out.println("El JTextField está vacío");
-        }
     }//GEN-LAST:event_txtFirstNameActionPerformed
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
@@ -158,6 +159,24 @@ public class Register extends javax.swing.JFrame {
     private void optionTypeUserItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_optionTypeUserItemStateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_optionTypeUserItemStateChanged
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        String name = txtFirstName.getText();
+        System.out.println(name);
+        
+        String LastName = txtLastName.getText();
+        System.out.println(LastName);
+        
+        String user = txtUser.getText();
+        System.out.println(user);
+        
+        String password = txtPassword.getText();
+        System.out.println(password);
+        
+        String type = optionTypeUser.getSelectedItem().toString();
+        System.out.println(type);
+    }//GEN-LAST:event_btnSubmitActionPerformed
 
     /**
      * @param args the command line arguments
