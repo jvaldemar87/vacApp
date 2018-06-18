@@ -48,6 +48,8 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnLogin.setText("Login");
+        btnLogin.setToolTipText("");
+        btnLogin.setFocusTraversalPolicyProvider(true);
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -146,12 +148,12 @@ public class Login extends javax.swing.JFrame {
                                 +txtUsuario.getText());
                     } 
                 } else {
-                        if(userType(txtUsuario.getText()) == "1"){
+                        if(userType(txtUsuario.getText()) == 1){
                             SupervisorView supervisorView = new SupervisorView();
                             supervisorView.show();
                             dispose();
                         }
-                        else if(userType(txtUsuario.getText()) == "2"){
+                        else if(userType(txtUsuario.getText()) == 2){
                             EmployeeView employeeView = new EmployeeView();
                             employeeView.show();
                             dispose();
@@ -230,7 +232,7 @@ public class Login extends javax.swing.JFrame {
         st = conection.createStatement();
         rs = st.executeQuery(sql);
 
-        if (rs.first()) {
+        if (rs.next()) {
             rs.close();
             return user;
         } else {
@@ -268,7 +270,7 @@ public class Login extends javax.swing.JFrame {
         Connection conection = conectorSQL.getInstance().getConnection();
         ResultSet rs = null;
         Statement st = null;
-        String sql = "SELECT * FROM usuarios where email='" + user + "'and Habilitado=0;";
+        String sql = "SELECT * FROM usuarios where email='" + user + "' and habilitado='1';";
         st = conection.createStatement();
         rs = st.executeQuery(sql);
         if (rs.first()) {
@@ -279,8 +281,8 @@ public class Login extends javax.swing.JFrame {
         }
     }
 
-    private String userType(String user) throws SQLException {
-        String type="null";
+    private int userType(String user) throws SQLException {
+        
         Connection conection = conectorSQL.getInstance().getConnection();
         ResultSet rs = null;
         Statement st = null;
@@ -289,10 +291,10 @@ public class Login extends javax.swing.JFrame {
         st = conection.createStatement();
         rs = st.executeQuery(sql);
         if(rs.first()){
-            JOptionPane.showMessageDialog(null, "tipo: "+sql);
-            return sql;
+            int type=rs.getInt("tipo");
+            return type;
         }
         else
-            return "falso";
+            return 0;
     }
 }
