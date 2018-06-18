@@ -20,7 +20,9 @@ import javax.swing.JTextField;
  * @author jvald
  */
 public class Login extends javax.swing.JFrame {
-    int counterFalses=0;
+
+    int counterFalses = 0;
+
     /**
      * Creates new form Login
      */
@@ -127,38 +129,35 @@ public class Login extends javax.swing.JFrame {
 
         try {
             if (userExist(txtUsuario.getText()) == "false") {
-                counterFalses =0;
+                counterFalses = 0;
                 JOptionPane.showMessageDialog(null, "Usuario incorrecto");
             } else {
-                if(consultingUserBlock(txtUsuario.getText()) == true){
+                if (consultingUserBlock(txtUsuario.getText()) == true) {
                     JOptionPane.showMessageDialog(null, "Usuario Bloqueado");
-                }
-                else{
-                    if (passCorrect(txtPassword.getText()) == "false") {
-                    counterFalses++;
-                    JOptionPane.showMessageDialog(
-                            null, "Contraseña incorrecta \n intento numero "+ counterFalses
-                            +"\n despues del 3º intento el usuario se bloqueara");
-                    if(counterFalses>3){
-                        bockUser(txtUsuario.getText());
-                        JOptionPane.showMessageDialog(
-                                null, "favor de contactar con un administrador para que se desbloquee al usuario:\n"
-                                +txtUsuario.getText());
-                    } 
                 } else {
-                        if(userType(txtUsuario.getText()) == "1"){
+                    if (passCorrect(txtPassword.getText()) == "false") {
+                        counterFalses++;
+                        JOptionPane.showMessageDialog(
+                                null, "Contraseña incorrecta \n intento numero " + counterFalses
+                                + "\n despues del 3º intento el usuario se bloqueara");
+                        if (counterFalses > 3) {
+                            bockUser(txtUsuario.getText());
+                            JOptionPane.showMessageDialog(
+                                    null, "favor de contactar con un administrador para que se desbloquee al usuario:\n"
+                                    + txtUsuario.getText());
+                        }
+                    } else {
+                        if (userType(txtUsuario.getText()) == 1) {
                             SupervisorView supervisorView = new SupervisorView();
                             supervisorView.show();
                             dispose();
-                        }
-                        else if(userType(txtUsuario.getText()) == "2"){
+                        } else if (userType(txtUsuario.getText()) == 2) {
                             EmployeeView employeeView = new EmployeeView();
                             employeeView.show();
                             dispose();
                         }
-                        
-                    
-                }
+
+                    }
                 }
             }
         } catch (SQLException ex) {
@@ -279,20 +278,20 @@ public class Login extends javax.swing.JFrame {
         }
     }
 
-    private String userType(String user) throws SQLException {
-        String type="null";
+    private int userType(String user) throws SQLException {
+
         Connection conection = conectorSQL.getInstance().getConnection();
         ResultSet rs = null;
         Statement st = null;
         String sql = "SELECT tipo from usuarios where email ='"
-                + user+"';";
+                + user + "';";
         st = conection.createStatement();
         rs = st.executeQuery(sql);
-        if(rs.first()){
-            JOptionPane.showMessageDialog(null, "tipo: "+sql);
-            return sql;
+        if (rs.first()) {
+            int type = rs.getInt("tipo");
+            return type;
+        } else {
+            return 0;
         }
-        else
-            return "falso";
     }
 }
