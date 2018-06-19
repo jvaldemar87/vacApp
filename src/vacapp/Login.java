@@ -154,7 +154,7 @@ public class Login extends javax.swing.JFrame {
                             dispose();
                         } else if (userType(txtUsuario.getText()) == 2) {
                             EmployeeView employeeView = new EmployeeView();
-                            employeeView.show();
+                            employeeView.setVisible(true);
                             dispose();
                         }
 
