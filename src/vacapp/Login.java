@@ -129,14 +129,14 @@ public class Login extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
         try {
-            if (userExist(txtUsuario.getText()) == "false") {
+            if (userExist(txtUsuario.getText()) == false) {
                 counterFalses = 0;
                 JOptionPane.showMessageDialog(null, "Usuario incorrecto");
             } else {
                 if (consultingUserBlock(txtUsuario.getText()) == true) {
                     JOptionPane.showMessageDialog(null, "Usuario Bloqueado");
                 } else {
-                    if (passCorrect(txtPassword.getText()) == "false") {
+                    if (passCorrect(txtPassword.getText()) == false) {
                         counterFalses++;
                         JOptionPane.showMessageDialog(
                                 null, "Contraseña incorrecta \n intento numero " + counterFalses
@@ -222,7 +222,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 
-    public static String userExist(String user) throws SQLException {
+    public static boolean userExist(String user) throws SQLException {
         Connection conection = conectorSQL.getInstance().getConnection();
         ResultSet rs = null;
         Statement st = null;
@@ -232,13 +232,13 @@ public class Login extends javax.swing.JFrame {
 
         if (rs.first()) {
             rs.close();
-            return user;
+            return true;
         } else {
-            return "false";
+            return false;
         }
     }
 
-    private String passCorrect(String pass) throws SQLException {
+    private boolean passCorrect(String pass) throws SQLException {
         Connection conection = conectorSQL.getInstance().getConnection();
         ResultSet rs = null;
         Statement st = null;
@@ -248,9 +248,9 @@ public class Login extends javax.swing.JFrame {
 
         if (rs.first()) {
             rs.close();
-            return pass;
+            return true;
         } else {
-            return "false";
+            return false;
         }
     }
 
